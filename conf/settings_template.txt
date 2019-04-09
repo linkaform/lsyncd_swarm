@@ -1,0 +1,10 @@
+settings  {
+        logfile = "/var/log/lsyncd/lsyncd.log",
+        statusFile = "/var/log/lsyncd/lsyncd.status",
+        pidfile = "/srv/lsyncd_swarm/.csi/lsyncd.pid",
+        insist = true,
+        maxProcesses = 1
+
+}
+
+

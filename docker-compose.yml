@@ -1,0 +1,45 @@
+# Deploy using `docker stack deploy -f docker-flow-stack.yml docker_flow`
+version: '3.7'
+
+networks:
+  csi_lsyncd:
+    external: true
+
+volumes:
+  lkf_infosync_media:
+
+services:
+  lsyncd: &base_conf
+    image: linkaform/lsyncd_swarm:latest
+    container_name: lkfcsi
+    build: 
+      context: ./ 
+      dockerfile: Dockerfile
+    networks:
+      - csi_lsyncd
+    environment:
+      SYNC_VOLUMES: lkf_infosync_media
+      HEARTBEAT: 25
+      MODE: compose
+    ports:
+      - 7029:7029
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - lkf_infosync_media:/srv/lsyncd_swarm/volumes/lkf_infosync_media
+    #command: /srv/lsyncd_swarm/scripts/make_configuration.sh
+    command: /srv/lsyncd_swarm/scripts/test.sh
+    stdin_open: true
+    tty: true
+
+  lsyncd_tres:
+    << : *base_conf
+    container_name: lkfcsi_tres
+    
+
+  lsyncd_dos:
+    << : *base_conf
+    container_name: lkfcsi_dos
+    depends_on:
+      - lsyncd
+      - lsyncd_tres

@@ -1,0 +1,18 @@
+sync {
+        default.rsyncssh,
+        source = "/srv/lsyncd_swarm/volumes/_VOLUME_NAME",
+        host = "_IPv4ADDRESS",
+        targetdir = "/srv/lsyncd_swarm/volumes/_VOLUME_NAME",
+        delay = 1,
+        maxProcesses = 1,
+        rsync     = {
+          binary   = "/usr/bin/rsync",
+          archive  = true,
+          perms    = true,
+          owner    = true,
+          update   = true,
+        },
+        ssh = {
+         port = 7029
+       }
+}

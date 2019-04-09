@@ -1,0 +1,28 @@
+# Deploy using `docker stack deploy -f docker-flow-stack.yml docker_flow`
+version: '3.7'
+
+
+networks:
+  csi_lsyncd:
+
+secrets:
+  id_rsa_lsyncd:
+    external: true
+  authorized_keys_lsyncd:
+    external: true
+
+services:
+  lsyncd:
+    image: linkaform/swarm_csi:latest
+    networks:
+      - csi_lsyncd
+    environment:
+      SYNC_VOLUMES: lkf_infosync_media
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: /srv/lsyncd_swarm/scripts/config_script.sh
+    secrets:
+      - id_rsa_lsyncd
+      - authorized_keys_lsyncd
+
+
